@@ -62,7 +62,7 @@ int main()
     for (int i = k; i <= n; i++)
     {
         int cnt = i - k;
-        ll res = c(n, k) * g(i) % mod;
+        ll res = c(i, k) * g(i) % mod;
         if (cnt & 1)
         {
             ans = (ans - res + mod) % mod;
