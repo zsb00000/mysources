@@ -1,68 +1,74 @@
 #include <bits/stdc++.h>
-#define int long long
 using namespace std;
-constexpr int mod = 998244853;
-int n;
 typedef long long ll;
-ll fac[(int)8e5 + 5];
-ll inv[(int)8e5 + 5];
+constexpr int mod = 1e9 + 7;
+constexpr int s = 2050;
+constexpr int maxx = 8005;
+int n;
 int a[(int)2e5 + 5];
 int b[(int)2e5 + 5];
-int maxx = 0;
-ll poww(ll a, ll b)
+ll fac[(int)2e5 + 5];
+ll inv[(int)2e5 + 5];
+ll f[5005][5005];
+ll poww(int a, int b)
 {
-    ll ans = 1;
+    ll res = 1;
+    ll base = a;
     while (b)
     {
         if (b & 1)
         {
-            ans = ans * a % mod;
+            res = res * base % mod;
         }
-        b >>= 1, a = a * a % mod;
+        base = base * base % mod;
+        b >>= 1;
     }
-    return ans;
+    return res;
 }
-inline ll c(int n, int m)
+inline int c(int n, int m)
 {
-    if (n < m)
+    if (m > n || m < 0)
         return 0;
     return fac[n] * inv[m] % mod * inv[n - m] % mod;
 }
-signed main()
+int main()
 {
-    freopen("flower.in", "r", stdin);
-    freopen("flower.out", "w", stdout);
+    // cout << poww(2, mod - 2) << endl;
+    // freopen("flower.in", "r", stdin);
+    // freopen("flower.out", "w", stdout);
+    ios::sync_with_stdio(false);
+    cin.tie(0);
     cin >> n;
     for (int i = 1; i <= n; i++)
     {
         cin >> a[i] >> b[i];
-        maxx = max(maxx, max(a[i], b[i]));
     }
     fac[0] = 1;
-    for (int i = 1; i <= maxx * 4; i++)
+    for (int i = 1; i <= maxx; i++)
     {
         fac[i] = fac[i - 1] * i % mod;
     }
-    inv[maxx * 4] = poww(fac[maxx * 4], mod - 2);
-    for (int i = maxx * 4 - 1; i >= 0; i--)
+    inv[maxx] = poww(fac[maxx], mod - 2);
+    for (int i = maxx - 1; i >= 0; i--)
     {
         inv[i] = inv[i + 1] * (i + 1) % mod;
+    }
+    for (int i = 1; i <= n; i++)
+    {
+        f[s - a[i]][s - b[i]]++;
+    }
+    for (int i = 1; i <= 2 * s; i++)
+    {
+        for (int j = 1; j <= 2 * s; j++)
+        {
+            f[i][j] = (f[i][j] + f[i - 1][j] + f[i][j - 1]) % mod;
+        }
     }
     ll ans = 0;
     for (int i = 1; i <= n; i++)
     {
-        for (int j = 1; j <= i - 1; j++)
-        {
-            ll res = c(a[i] + a[j] + b[i] + b[j], a[i] + a[j]);
-            ans = (ans + res) % mod;
-        }
+        ans = (ans + f[s + a[i]][s + b[i]] % mod - c(2 * a[i] + 2 * b[i], 2 * a[i]) + mod) % mod;
     }
-    cout << ans << endl;
+    cout << ans * 500000004 % mod << "\n";
     return 0;
 }
-/*
-3
-1 1
-2 1
-1 1
-*/
