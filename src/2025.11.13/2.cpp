@@ -12,11 +12,11 @@ void insert(int x)
     for (int i = 30; i >= 0; i--)
     {
         int bit = (x >> i) & 1;
-        if (tree[bit][rt] == -1)
+        if (tree[rt][bit] == -1)
         {
-            tree[bit][rt] = ++tot;
+            tree[rt][bit] = ++tot;
         }
-        rt = tree[bit][rt];
+        rt = tree[rt][bit];
     }
 }
 int find(int x)
@@ -26,14 +26,14 @@ int find(int x)
     for (int i = 30; i >= 0; i--)
     {
         int bit = ((x >> i) & 1) ^ 1;
-        if (tree[bit][rt] != -1)
+        if (tree[rt][bit] != -1)
         {
             ans |= (1ll << i);
-            rt = tree[bit][rt];
+            rt = tree[rt][bit];
         }
         else
         {
-            rt = tree[bit ^ 1][rt];
+            rt = tree[rt][bit ^ 1];
         }
     }
     return ans;
