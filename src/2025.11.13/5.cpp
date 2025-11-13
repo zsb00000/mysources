@@ -16,7 +16,7 @@ inline int get(char x)
 {
     return x - 'a';
 }
-int insert(string s)
+int _insert(string &s)
 {
     int rt = root;
     for (char x : s)
@@ -59,7 +59,7 @@ void build()
         }
     }
 }
-void query(string s)
+void query(string &s)
 {
     int rt = 0;
     for (char x : s)
@@ -83,7 +83,7 @@ int main()
     {
         string s;
         cin >> s;
-        ed[i] = insert(s);
+        ed[i] = _insert(s);
     }
     build();
     string s;
