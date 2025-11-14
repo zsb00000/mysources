@@ -15,8 +15,8 @@ int _gcd[15][15] = {{},
                     {-1, 1, 2, 1, 2, 5, 2, 1, 2, 1, 10}};
 int main()
 {
-    // freopen("permutation.in", "r", stdin);
-    // freopen("permutation.out", "w", stdout);
+    freopen("permutation.in", "r", stdin);
+    freopen("permutation.out", "w", stdout);
     int n, k;
     cin >> n >> k;
     for (int i = 1; i <= n; i++)
