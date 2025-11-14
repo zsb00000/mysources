@@ -33,6 +33,7 @@ ll poww(ll a, ll b)
 }
 void pre()
 {
+    fac[0] = 1;
     for (int i = 1; i <= n + 1; i++)
     {
         fac[i] = fac[i - 1] * i % mod;
@@ -51,8 +52,8 @@ inline ll c(int n, int m)
 }
 int main()
 {
-    freopen("permutation.in", "r", stdin);
-    freopen("permutation.out", "w", stdout);
+    // freopen("permutation.in", "r", stdin);
+    // freopen("permutation.out", "w", stdout);
     cin >> n >> k;
     if (n == k)
     {
@@ -63,6 +64,24 @@ int main()
     for (int i = 1; i <= n; i++)
     {
         a[i] = i;
+    }
+    if (n <= 10)
+    {
+        int ans = 0;
+        do
+        {
+            bool flag = 1;
+            for (int i = 2; i <= n && flag; i++)
+            {
+                if (_gcd[a[i]][a[i - 1]] == k)
+                {
+                    flag = 0;
+                }
+            }
+            ans += flag;
+        } while (next_permutation(a + 1, a + 1 + n));
+        cout << ans << endl;
+        return 0;
     }
     for (int i = 1; i <= n; i++)
     {
@@ -80,19 +99,28 @@ int main()
         cout << fac[n] << endl;
         return 0;
     }
-    int ans = 0;
-    do
+    else
     {
-        bool flag = 1;
-        for (int i = 2; i <= n && flag; i++)
+        pre();
+        ll ans = 0;
+        for (int i = 1; i <= x.size(); i++)
         {
-            if (_gcd[a[i]][a[i - 1]] == k)
+            ll res = c(x.size(), i) * fac[n - i] % mod * (n - i + 1) % mod * poww(2, mod - 2) % mod;
+            if (i & 1)
             {
-                flag = 0;
+                ans = (ans - res + mod) % mod;
             }
+            else
+            {
+                ans = (ans + res) % mod;
+            }
+            // cout << ans << endl;
         }
-        ans += flag;
-    } while (next_permutation(a + 1, a + 1 + n));
-    cout << ans << endl;
+        cout << (ans + fac[n]) % mod << endl;
+    }
     return 0;
 }
+/*
+39916800
+479001600
+*/
