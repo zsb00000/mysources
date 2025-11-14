@@ -55,6 +55,8 @@ int main()
     freopen("permutation.in", "r", stdin);
     freopen("permutation.out", "w", stdout);
     cin >> n >> k;
+    if (n == 1)
+        return cout << 0 << endl, 0;
     if (n == k)
     {
         pre();
@@ -74,6 +76,24 @@ int main()
             for (int i = 2; i <= n && flag; i++)
             {
                 if (_gcd[a[i]][a[i - 1]] == k)
+                {
+                    flag = 0;
+                }
+            }
+            ans += flag;
+        } while (next_permutation(a + 1, a + 1 + n));
+        cout << ans << endl;
+        return 0;
+    }
+    else if (n <= 20)
+    {
+        int ans = 0;
+        do
+        {
+            bool flag = 1;
+            for (int i = 2; i <= n && flag; i++)
+            {
+                if (__gcd(a[i], a[i - 1]) == k)
                 {
                     flag = 0;
                 }
