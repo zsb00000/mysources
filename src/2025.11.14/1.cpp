@@ -1,7 +1,12 @@
 #include <bits/stdc++.h>
 using namespace std;
 constexpr int mod = 998244353;
+typedef long long ll;
+ll fac[(int)1e5 + 5];
+ll inv[(int)1e5 + 5];
 int a[3005];
+vector<pair<int, int>> x;
+int n, k;
 int _gcd[15][15] = {{},
                     {-1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
                     {-1, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2},
@@ -13,15 +18,67 @@ int _gcd[15][15] = {{},
                     {-1, 1, 2, 1, 4, 1, 2, 1, 8, 1, 2},
                     {-1, 1, 1, 3, 1, 1, 3, 1, 1, 9, 1},
                     {-1, 1, 2, 1, 2, 5, 2, 1, 2, 1, 10}};
+ll poww(ll a, ll b)
+{
+    ll ans = 1;
+    while (b)
+    {
+        if (b & 1)
+        {
+            ans = ans * a % mod;
+        }
+        b >>= 1, a = a * a % mod;
+    }
+    return ans;
+}
+void pre()
+{
+    for (int i = 1; i <= n + 1; i++)
+    {
+        fac[i] = fac[i - 1] * i % mod;
+    }
+    inv[n + 1] = poww(fac[n + 1], mod - 2);
+    for (int i = n; i >= 0; i--)
+    {
+        inv[i] = inv[i + 1] * (i + 1) % mod;
+    }
+}
+inline ll c(int n, int m)
+{
+    if (n < m)
+        return 0;
+    return fac[n] * inv[m] % mod * inv[n - m] % mod;
+}
 int main()
 {
     freopen("permutation.in", "r", stdin);
     freopen("permutation.out", "w", stdout);
-    int n, k;
     cin >> n >> k;
+    if (n == k)
+    {
+        pre();
+        cout << fac[n] << endl;
+        return 0;
+    }
     for (int i = 1; i <= n; i++)
     {
         a[i] = i;
+    }
+    for (int i = 1; i <= n; i++)
+    {
+        for (int j = i + 1; j <= n; j++)
+        {
+            if (i != j && __gcd(i, j) == k)
+            {
+                x.emplace_back(i, j);
+            }
+        }
+    }
+    if (x.empty())
+    {
+        pre();
+        cout << fac[n] << endl;
+        return 0;
     }
     int ans = 0;
     do
