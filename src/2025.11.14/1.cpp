@@ -5,7 +5,7 @@ typedef long long ll;
 ll fac[(int)1e5 + 5];
 ll inv[(int)1e5 + 5];
 int a[3005];
-vector<pair<int, int>> x;
+vector<int> x;
 int n, k;
 int _gcd[15][15] = {{},
                     {-1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
@@ -85,12 +85,9 @@ int main()
     }
     for (int i = 1; i <= n; i++)
     {
-        for (int j = i + 1; j <= n; j++)
+        if (i % k == 0)
         {
-            if (i != j && __gcd(i, j) == k)
-            {
-                x.emplace_back(i, j);
-            }
+            x.push_back(i);
         }
     }
     if (x.empty())
@@ -103,20 +100,15 @@ int main()
     {
         pre();
         ll ans = 0;
-        for (int i = 1; i <= x.size(); i++)
+        for (int i = 0; i <= x.size(); i++)
         {
-            ll res = c(x.size(), i) * fac[n - i] % mod * (n - i + 1) % mod * poww(2, mod - 2) % mod;
+            ll res = c(x.size(), i) * fac[n - i] % mod * fac[i] % mod;
             if (i & 1)
-            {
                 ans = (ans - res + mod) % mod;
-            }
             else
-            {
                 ans = (ans + res) % mod;
-            }
-            // cout << ans << endl;
         }
-        cout << (ans + fac[n]) % mod << endl;
+        cout << ans << endl;
     }
     return 0;
 }
