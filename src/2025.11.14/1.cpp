@@ -1,187 +1,113 @@
 #include <bits/stdc++.h>
+#define int long long
 using namespace std;
 constexpr int mod = 998244353;
-typedef long long ll;
-ll fac[(int)1e5 + 5];
-ll inv[(int)1e5 + 5];
-int a[3005];
-vector<int> x;
-int n, k;
-int _gcd[15][15] = {{},
-                    {-1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                    {-1, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2},
-                    {-1, 1, 1, 3, 1, 1, 3, 1, 1, 3, 1},
-                    {-1, 1, 2, 1, 4, 1, 2, 1, 4, 1, 2},
-                    {-1, 1, 1, 1, 1, 5, 1, 1, 1, 1, 5},
-                    {-1, 1, 2, 3, 2, 1, 6, 1, 2, 3, 2},
-                    {-1, 1, 1, 1, 1, 1, 1, 7, 1, 1, 1},
-                    {-1, 1, 2, 1, 4, 1, 2, 1, 8, 1, 2},
-                    {-1, 1, 1, 3, 1, 1, 3, 1, 1, 9, 1},
-                    {-1, 1, 2, 1, 2, 5, 2, 1, 2, 1, 10}};
-ll poww(ll a, ll b)
+int g[15][15];
+int dp[2048][15][15];
+int fac[3005];
+int inv[3005];
+int f[3005];
+inline int c(int n, int m)
 {
-    ll ans = 1;
+    if (n < m)
+        return 0;
+    return fac[n] * inv[m] % mod * inv[n - m] % mod;
+}
+int poww(int a, int b)
+{
+    int ans = 1;
     while (b)
     {
         if (b & 1)
         {
             ans = ans * a % mod;
         }
-        b >>= 1, a = a * a % mod;
+        a = a * a % mod;
+        b >>= 1;
     }
     return ans;
 }
-void pre()
-{
-    fac[0] = 1;
-    for (int i = 1; i <= n + 1; i++)
-    {
-        fac[i] = fac[i - 1] * i % mod;
-    }
-    inv[n + 1] = poww(fac[n + 1], mod - 2);
-    for (int i = n; i >= 0; i--)
-    {
-        inv[i] = inv[i + 1] * (i + 1) % mod;
-    }
-}
-inline ll c(int n, int m)
-{
-    if (n < m)
-        return 0;
-    return fac[n] * inv[m] % mod * inv[n - m] % mod;
-}
-int main()
+signed main()
 {
     freopen("permutation.in", "r", stdin);
     freopen("permutation.out", "w", stdout);
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    int n, k;
     cin >> n >> k;
-    if (n == 3000 && k == 300)
-        return cout << 936938444 << endl, 0;
-    if (n == 3000 && k == 301)
-        return cout << 224833732 << endl, 0;
-    if (n == 2999 && k == 391)
-        return cout << 691177047 << endl, 0;
-    if (n == 1)
-        return cout << 0 << endl, 0;
-    if (k == 1)
-        return cout << 0 << endl, 0;
-    if (n == 10 && k == 2)
-        return cout << 172800 << endl, 0;
-    if (n == 10 && k == 3)
-        return cout << 1693440 << endl, 0;
-    if (n == 10 && k == 4)
-        return cout << 2903040 << endl, 0;
-    if (n == 10 && k == 5)
-        return cout << 2903040 << endl, 0;
-    if (n == 11 && k == 2)
-        return cout << 3024000 << endl, 0;
-    if (n == 11 && k == 3)
-        return cout << 20321280 << endl, 0;
-    if (n == 11 && k == 4)
-        return cout << 32659200 << endl, 0;
-    if (n == 11 && k == 5)
-        return cout << 32659200 << endl, 0;
-    if (n == 12 && k == 2)
-        return cout << 27216000 << endl, 0;
-    if (n == 12 && k == 3)
-        return cout << 162570240 << endl, 0;
-    if (n == 12 && k == 4)
-        return cout << 261273600 << endl, 0;
-    if (n == 12 && k == 5)
-        return cout << 399168000 << endl, 0;
-    if (n == 12 && k == 6)
-        return cout << 399168000 << endl, 0;
-    if (n == 13 && k == 2)
-        return cout << 497871360 << endl, 0;
-    if (n == 13 && k == 3)
-        return cout << 354973694 << endl, 0;
-    if (n == 13 && k == 4)
-        return cout << 597778941 << endl, 0;
-    if (n == k)
+    int t = n / k;
+    vector<int> s;
+    for (int i = 1; i <= n; i++)
     {
-        pre();
+        if (i % k == 0)
+            s.push_back(i);
+    }
+    for (int i = 0; i < t; i++)
+    {
+        for (int j = 0; j < t; j++)
+        {
+            if (__gcd(s[i], s[j]) == k)
+            {
+                g[i][j] = 1;
+            }
+        }
+    }
+    fac[0] = 1;
+    for (int i = 1; i <= n; i++)
+    {
+        fac[i] = fac[i - 1] * i % mod;
+    }
+    inv[n] = poww(fac[n], mod - 2);
+    for (int i = n - 1; i >= 0; i--)
+    {
+        inv[i] = inv[i + 1] * (i + 1) % mod;
+    }
+    if (t == 0)
+    {
         cout << fac[n] << endl;
         return 0;
     }
-    for (int i = 1; i <= n; i++)
+    for (int i = 0; i < t; i++)
     {
-        a[i] = i;
+        dp[1 << i][i][0] = 1;
     }
-    if (n <= 10)
+    for (int mask = 0; mask < (1 << t); mask++)
     {
-        int ans = 0;
-        do
+        for (int i = 0; i < t; i++)
         {
-            bool flag = 1;
-            for (int i = 2; i <= n && flag; i++)
+            if (!(mask & (1 << i)))
+                continue;
+            for (int a = 0; a < t; a++)
             {
-                if (_gcd[a[i]][a[i - 1]] == k)
+                if (!dp[mask][i][a])
+                    continue;
+                for (int j = 0; j < t; j++)
                 {
-                    flag = 0;
+                    if (mask & (1 << j))
+                        continue;
+                    int nmask = mask | (1 << j);
+                    int na = a + g[i][j];
+                    if (a >= t)
+                        continue;
+                    dp[nmask][j][na] = (dp[nmask][j][na] + dp[mask][i][a]) % mod;
                 }
             }
-            ans += flag;
-        } while (next_permutation(a + 1, a + 1 + n));
-        cout << ans << endl;
-        return 0;
+        }
     }
-    else if (n <= 20)
+
+    for (int i = 0; i < t; i++)
     {
-        int ans = 0;
-        do
+        for (int a = 0; a < t; a++)
         {
-            bool flag = 1;
-            for (int i = 2; i <= n && flag; i++)
-            {
-                if (__gcd(a[i], a[i - 1]) == k)
-                {
-                    flag = 0;
-                }
-            }
-            ans += flag;
-        } while (next_permutation(a + 1, a + 1 + n));
-        cout << ans << endl;
-        return 0;
+            f[a] = (f[a] + dp[(1 << t) - 1][i][a]) % mod;
+        }
     }
-    else
+    int ans = 0;
+    for (int i = 0; i < t; i++)
     {
-        if (k >= (n >> 1))
-        {
-            pre();
-            cout << fac[n] << endl;
-            return 0;
-        }
-        for (int i = 1; i <= n; i++)
-        {
-            if (i % k == 0)
-            {
-                x.push_back(i);
-            }
-        }
-        if (x.empty())
-        {
-            pre();
-            cout << fac[n] << endl;
-            return 0;
-        }
-        else
-        {
-            pre();
-            ll ans = 0;
-            for (int i = 0; i <= x.size(); i++)
-            {
-                ll res = c(x.size(), i) * fac[n - i] % mod * fac[i] % mod;
-                if (i & 1)
-                    ans = (ans - res + mod) % mod;
-                else
-                    ans = (ans + res) % mod;
-            }
-            cout << ans << endl;
-        }
+        ans = (ans + f[i] * c(n - i, t)) % mod;
     }
+    ans = ans * fac[n - t] % mod;
+    cout << ans << endl;
     return 0;
 }
-/*
-39916800
-479001600
-*/
