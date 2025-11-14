@@ -52,8 +52,8 @@ inline ll c(int n, int m)
 }
 int main()
 {
-    // freopen("permutation.in", "r", stdin);
-    // freopen("permutation.out", "w", stdout);
+    freopen("permutation.in", "r", stdin);
+    freopen("permutation.out", "w", stdout);
     cin >> n >> k;
     if (n == k)
     {
@@ -83,32 +83,35 @@ int main()
         cout << ans << endl;
         return 0;
     }
-    for (int i = 1; i <= n; i++)
-    {
-        if (i % k == 0)
-        {
-            x.push_back(i);
-        }
-    }
-    if (x.empty())
-    {
-        pre();
-        cout << fac[n] << endl;
-        return 0;
-    }
     else
     {
-        pre();
-        ll ans = 0;
-        for (int i = 0; i <= x.size(); i++)
+        for (int i = 1; i <= n; i++)
         {
-            ll res = c(x.size(), i) * fac[n - i] % mod * fac[i] % mod;
-            if (i & 1)
-                ans = (ans - res + mod) % mod;
-            else
-                ans = (ans + res) % mod;
+            if (i % k == 0)
+            {
+                x.push_back(i);
+            }
         }
-        cout << ans << endl;
+        if (x.empty())
+        {
+            pre();
+            cout << fac[n] << endl;
+            return 0;
+        }
+        else
+        {
+            pre();
+            ll ans = 0;
+            for (int i = 0; i <= x.size(); i++)
+            {
+                ll res = c(x.size(), i) * fac[n - i] % mod * fac[i] % mod;
+                if (i & 1)
+                    ans = (ans - res + mod) % mod;
+                else
+                    ans = (ans + res) % mod;
+            }
+            cout << ans << endl;
+        }
     }
     return 0;
 }
