@@ -105,6 +105,12 @@ int main()
     }
     else
     {
+        if (k >= (n >> 1))
+        {
+            pre();
+            cout << fac[n] << endl;
+            return 0;
+        }
         for (int i = 1; i <= n; i++)
         {
             if (i % k == 0)
