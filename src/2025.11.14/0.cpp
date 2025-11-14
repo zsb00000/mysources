@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#define int long long
 using namespace std;
 int n, m;
 typedef long long ll;
@@ -31,7 +32,7 @@ inline ll get(point &a, point &b)
 {
     return min(abs(a.x - b.x), abs(a.y - b.y));
 }
-int main()
+signed main()
 {
     freopen("teleport.in", "r", stdin);
     freopen("teleport.out", "w", stdout);
@@ -41,6 +42,7 @@ int main()
     cin >> n >> m;
     for (int i = 1; i <= n; i++)
     {
+        dis[i] = LLONG_MAX;
         int x, y;
         cin >> x >> y;
         flag &= (x == y);
@@ -51,19 +53,19 @@ int main()
         int u, v;
         ll w;
         cin >> u >> v >> w;
-        w = min(w, get(p[u], p[v]));
+        // w = min(w, get(p[u], p[v]));
         a[u].emplace_back(v, w);
         a[v].emplace_back(u, w);
     }
-    memset(dis, 0x3f, sizeof(dis));
-    if (m == 0)
-    {
-        for (int i = 2; i <= n; i++)
-        {
-            cout << get(p[1], p[i]) << " ";
-        }
-    }
-    else if (n <= 1000)
+    // memset(dis, 0x3f, sizeof(dis));
+    // if (m == 0)
+    // {
+    //     for (int i = 2; i <= n; i++)
+    //     {
+    //         cout << get(p[1], p[i]) << " ";
+    //     }
+    // }
+    if (n <= 1000)
     {
         for (int i = 1; i <= n; i++)
         {
@@ -133,14 +135,19 @@ int main()
     }
     else
     {
+        vector<int> vis(n + 5, 0);
         sort(p + 1, p + 1 + n);
-        for (int i = 1; i <= n; i++)
+        for (int i = 1; i < n; i++)
         {
-            for (int j = 1; j <= 20; j++)
-            {
-                a[p[i].id].emplace_back(p[i + j].id, get(p[i], p[i + j]));
-                a[p[i + j].id].emplace_back(p[i].id, get(p[i], p[i + j]));
-            }
+            a[p[i].id].emplace_back(p[i + 1].id, get(p[i], p[i + 1]));
+            a[p[i + 1].id].emplace_back(p[i].id, get(p[i + 1], p[i]));
+        }
+        sort(p + 1, p + 1 + n, [&](const point &x, const point &y)
+             {if(x.y==y.y)return x.x<y.x;else return x.y<y.y; });
+        for (int i = 1; i < n; i++)
+        {
+            a[p[i].id].emplace_back(p[i + 1].id, get(p[i], p[i + 1]));
+            a[p[i + 1].id].emplace_back(p[i].id, get(p[i + 1], p[i]));
         }
         priority_queue<node> q;
         q.push(node(1, 0));
@@ -149,11 +156,14 @@ int main()
         {
             int x = q.top().v;
             q.pop();
+            if (vis[x])
+                continue;
+            vis[x] = 1;
             for (auto &i : a[x])
             {
                 int v = i.v;
                 int w = i.w;
-                if (dis[v] > dis[x] + w)
+                if ((!vis[v]) && dis[v] > dis[x] + w)
                 {
                     dis[v] = dis[x] + w;
                     q.push(node(v, dis[v]));
