@@ -87,8 +87,8 @@ int query(int id, int l, int r)
 }
 signed main()
 {
-    // freopen("simulator.in", "r", stdin);
-    // freopen("simulator.out", "w", stdout);
+    freopen("simulator.in", "r", stdin);
+    freopen("simulator.out", "w", stdout);
     ios::sync_with_stdio(false);
     cin.tie(0), cout.tie(0);
     cin >> n;
