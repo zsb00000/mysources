@@ -18,7 +18,8 @@ func find(x int) int{
 	if father[x]==x{
 		return x
 	}
-	return find(father[x])
+	father[x]=find(father[x])
+	return father[x]
 }
 
 func union(x,y int) {
@@ -39,7 +40,7 @@ func dfs(x,y int) {
 	for i:=0;i<4;i++{
 		xx :=x+dx[i]
 		yy :=y+dy[i]
-		fmt.Printf("Checking neighbor: (%d, %d)\n", xx, yy)
+		// fmt.Printf("Checking neighbor: (%d, %d)\n", xx, yy)
 		if !(xx>=1&&xx<=n&&yy>=1&&yy<=n){
 			continue
 		}
@@ -58,10 +59,10 @@ func dfs(x,y int) {
 }
 
 func main(){
-	fmt.Scanf("%d %d",&n,&m)
+	fmt.Scan(&n,&m)
     for i := 1; i <= n; i++ {
         var s string
-        fmt.Scanf("%s", &s)
+        fmt.Scan(&s)
         for j := 1; j <= n; j++ {
             _map[i][j] = int(s[j-1] - '0')
         }
@@ -80,7 +81,7 @@ func main(){
 	}
 	for i:=1;i<=m;i++{
 		var x,y int
-		fmt.Scanf("%d %d",&x,&y)
+		fmt.Scan(&x,&y)
 		fmt.Println(rank[find(get(x,y))])
 	}
 }
